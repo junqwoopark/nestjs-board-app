@@ -13,7 +13,6 @@ import {
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatus } from './boards-status.enum';
-import { userInfo } from 'os';
 import { BoardStatusValidationPipe } from './pipes/board-status-validatioin.pipe';
 import { Board } from './board.entity';
 
