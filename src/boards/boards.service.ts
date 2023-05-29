@@ -3,6 +3,7 @@ import { BoardStatus } from './boards-status.enum';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardRepository } from './board.repository';
 import { Board } from './board.entity';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class BoardsService {
@@ -14,16 +15,24 @@ export class BoardsService {
     return found;
   }
 
-  async getAllBoards(): Promise<Board[]> {
-    return this.boardRepository.find();
+  async getAllBoards(user: User): Promise<Board[]> {
+    return this.boardRepository.getAllBoards(user);
   }
 
-  async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-    return this.boardRepository.createBoard(createBoardDto);
+  async createBoard(
+    createBoardDto: CreateBoardDto,
+    user: User,
+  ): Promise<Board> {
+    return this.boardRepository.createBoard(createBoardDto, user);
   }
 
-  async deleteBoard(id: number): Promise<void> {
-    const result = await this.boardRepository.delete(id);
+  async deleteBoard(id: number, user: User): Promise<void> {
+    const result = await this.boardRepository.delete({
+      id,
+      user: {
+        id: user.id,
+      },
+    });
     if (result.affected === 0)
       throw new NotFoundException(`Can't find Board with id ${id}`);
   }
